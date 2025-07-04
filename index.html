@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tienda de Álbumes</title>
+  <title>Tienda de Álbumes Digitales</title>
   <style>
     :root {
       --bg: #fafafa;
@@ -17,7 +17,6 @@
       font-family: 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.4;
     }
     header {
       background: var(--accent);
@@ -39,7 +38,9 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: transform .2s;
     }
-    .album-card:hover { transform: translateY(-4px); }
+    .album-card:hover {
+      transform: translateY(-4px);
+    }
     .album-cover {
       width: 100%;
       display: block;
@@ -49,8 +50,14 @@
       padding: 12px;
       text-align: center;
     }
-    .album-info h3 { margin-bottom: 6px; font-size: 1.1em; }
-    .album-info p.artist { margin-bottom: 10px; font-style: italic; }
+    .album-info h3 {
+      margin-bottom: 6px;
+      font-size: 1.1em;
+    }
+    .album-info p.artist {
+      margin-bottom: 10px;
+      font-style: italic;
+    }
     .album-info p.price {
       margin-bottom: 12px;
       font-weight: bold;
@@ -105,11 +112,11 @@
 </head>
 <body>
 
-  <header>Tienda de Álbumes</header>
+  <header>Tienda de Álbumes Digitales</header>
 
   <div id="albums-container"></div>
 
-  <!-- Popup imagen portada -->
+  <!-- Popup portada ampliada -->
   <div id="cover-popup" class="popup">
     <div class="popup-content">
       <span class="close" data-close="cover-popup">&times;</span>
@@ -132,54 +139,67 @@
   <script>
     const PAYPAL_EMAIL = 'tu-paypal@ejemplo.com';
 
-    // Carga y muestra álbumes
-    fetch('albums.json')
-      .then(r => r.json())
-      .then(data => {
-        const container = document.getElementById('albums-container');
-        data.forEach(album => {
-          const card = document.createElement('div');
-          card.className = 'album-card';
-          card.innerHTML = `
-            <img class="album-cover" src="${album.cover}" alt="${album.title}">
-            <div class="album-info">
-              <h3>${album.title}</h3>
-              <p class="artist">${album.artist}</p>
-              <p class="price">${album.price.toFixed(2)} €</p>
-              <button class="btn btn-preview">Vista previa</button>
-              <button class="btn btn-buy">Comprar</button>
-            </div>`;
-          container.appendChild(card);
+    // Datos de ejemplo: dos álbumes con portada de "pantalla digital"
+    const albums = [
+      {
+        title: "Electro Visions",
+        artist: "Digital Pulse",
+        price: 11.99,
+        cover: "https://via.placeholder.com/400x400.png?text=Digital+Screen+1",
+        preview: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      },
+      {
+        title: "Cyber Beats",
+        artist: "Neon Wave",
+        price: 13.50,
+        cover: "https://via.placeholder.com/400x400.png?text=Digital+Screen+2",
+        preview: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+      }
+    ];
 
-          // Ver portada
-          card.querySelector('.album-cover').onclick = () => {
-            document.getElementById('cover-img').src = album.cover;
-            document.getElementById('cover-popup').style.display = 'flex';
-          };
+    // Renderiza los álbumes
+    const container = document.getElementById('albums-container');
+    albums.forEach(album => {
+      const card = document.createElement('div');
+      card.className = 'album-card';
+      card.innerHTML = `
+        <img class="album-cover" src="${album.cover}" alt="${album.title}">
+        <div class="album-info">
+          <h3>${album.title}</h3>
+          <p class="artist">${album.artist}</p>
+          <p class="price">${album.price.toFixed(2)} €</p>
+          <button class="btn btn-preview">Vista previa</button>
+          <button class="btn btn-buy">Comprar</button>
+        </div>`;
+      container.appendChild(card);
 
-          // Preview audio
-          card.querySelector('.btn-preview').onclick = () => {
-            const audio = document.getElementById('audio-preview');
-            audio.src = album.preview;
-            document.getElementById('preview-popup').style.display = 'flex';
-          };
+      // Ver portada ampliada
+      card.querySelector('.album-cover').onclick = () => {
+        document.getElementById('cover-img').src = album.cover;
+        document.getElementById('cover-popup').style.display = 'flex';
+      };
 
-          // Comprar via PayPal
-          card.querySelector('.btn-buy').onclick = () => {
-            const params = new URLSearchParams({
-              cmd: '_xclick',
-              business: PAYPAL_EMAIL,
-              item_name: album.title + ' - ' + album.artist,
-              amount: album.price.toFixed(2),
-              currency_code: 'EUR'
-            });
-            window.open('https://www.paypal.com/cgi-bin/webscr?' + params, '_blank');
-          };
+      // Reproducir fragmento
+      card.querySelector('.btn-preview').onclick = () => {
+        const audio = document.getElementById('audio-preview');
+        audio.src = album.preview;
+        document.getElementById('preview-popup').style.display = 'flex';
+      };
+
+      // Comprar en PayPal
+      card.querySelector('.btn-buy').onclick = () => {
+        const params = new URLSearchParams({
+          cmd: '_xclick',
+          business: PAYPAL_EMAIL,
+          item_name: `${album.title} - ${album.artist}`,
+          amount: album.price.toFixed(2),
+          currency_code: 'EUR'
         });
-      })
-      .catch(console.error);
+        window.open('https://www.paypal.com/cgi-bin/webscr?' + params, '_blank');
+      };
+    });
 
-    // Cierra popups
+    // Cerrar popups
     document.querySelectorAll('.close').forEach(btn => {
       btn.onclick = () => {
         document.getElementById(btn.dataset.close).style.display = 'none';
@@ -188,3 +208,4 @@
   </script>
 </body>
 </html>
+```
