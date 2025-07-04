@@ -4,6 +4,10 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tienda de Álbumes Digitales</title>
+
+  <!-- Fuente decorativa para el banner -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #fafafa;
@@ -18,12 +22,16 @@
       background: var(--bg);
       color: var(--text);
     }
+    /* Banner grande con tonos marrones y tipografía atractiva */
     header {
-      background: var(--accent);
-      color: #fff;
+      background: linear-gradient(45deg, #8B4513, #A0522D, #D2691E);
+      color: #f5f5dc;
       text-align: center;
-      padding: 20px;
-      font-size: 1.8em;
+      padding: 50px 20px;
+      font-size: 3em;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     #albums-container {
       display: grid;
@@ -52,11 +60,12 @@
     }
     .album-info h3 {
       margin-bottom: 6px;
-      font-size: 1.1em;
+      font-size: 1.2em;
     }
     .album-info p.artist {
       margin-bottom: 10px;
       font-style: italic;
+      color: #666;
     }
     .album-info p.price {
       margin-bottom: 12px;
